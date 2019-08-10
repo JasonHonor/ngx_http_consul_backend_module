@@ -123,7 +123,7 @@ This installation guide uses ubuntu/debian. Adapt as-needed for other platforms.
 1. Download/clone this repository:
 
     ```sh
-    $ git clone https://github.com/hashicorp/ngx_http_consul_backend_module.git /go/src/github.com/JasonHonor/ngx_http_consul_backend_module
+    $ git clone https://github.com/JasonHonor/ngx_http_consul_backend_module.git /go/src/github.com/JasonHonor/ngx_http_consul_backend_module
     ```
 
 1. Compile the Go code as a shared C library which nginx will dynamically load.
@@ -132,7 +132,7 @@ This uses CGO and binds to the nginx development kit:
     ```sh
     $ cd /tmp/ngx_http_consul_backend_module/src
     $ mkdir -p /usr/local/nginx/ext
-    $ CGO_CFLAGS="-I /tmp/ngx_devel_kit-0.3.0/src" \
+    $ CGO_CFLAGS="-I /tmp/ngx_devel_kit-0.3.1/src" \
         go build \
           -buildmode=c-shared \
           -o /usr/local/nginx/ext/ngx_http_consul_backend_module.so \
