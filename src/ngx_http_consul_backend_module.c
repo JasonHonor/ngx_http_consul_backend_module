@@ -1,7 +1,7 @@
 #include <ndk.h>
 
 static ngx_int_t
-ngx_http_consul_backend(ngx_http_request_t *r, ngx_str_t *val, ngx_http_variable_value_t *v);
+ngx_http_consul_backend(ngx_http_request_t *r, ngx_str_t *val, ngx_http_variable_value_t *v,void *cfg);
 
 static ndk_set_var_t
 ngx_http_consul_backend_filter = {
@@ -44,19 +44,25 @@ ngx_module_t ngx_http_consul_backend_module = {
 };
 
 static ngx_int_t
-ngx_http_consul_backend(ngx_http_request_t *r, ngx_str_t *res, ngx_http_variable_value_t *v) {
-  void *go_module = dlopen("ngx_http_consul_backend_module.so", RTLD_LAZY);
+ngx_http_consul_backend(ngx_http_request_t *r, ngx_str_t *res, ngx_http_variable_value_t *v,void *cfg) {
+  
+  ngx_log_error(NGX_LOG_ERR, r->connection->log, 0,(char*)cfg);
+  
+  void *go_module = dlopen("/etc/nginx/ext/ngx_http_consul_backend_module.so", RTLD_LAZY);
+  
   if (!go_module) {
     ngx_log_error(NGX_LOG_ERR, r->connection->log, 0, "go module not found");
     return NGX_ERROR;
   }
 
   u_char* (*fun)(u_char *) = (u_char* (*)(u_char *)) dlsym(go_module, "LookupBackend");
+  
   u_char* backend = fun(v->data);
 
   ngx_str_t ngx_backend = { strlen(backend), backend };
 
   res->data = ngx_palloc(r->pool, ngx_backend.len);
+  
   if (res->data == NULL) {
     return NGX_ERROR;
   }

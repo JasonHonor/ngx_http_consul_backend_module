@@ -27,7 +27,7 @@ const (
 	ctxTimeout = 5 * time.Second
 
 	// serviceTagSep is the separator between service names and tags.
-	serviceTagSep = "."
+	serviceTagSep = "@"
 )
 
 // main is required for the file to compile to an object.
@@ -35,20 +35,26 @@ func main() {}
 
 // setup the consul client
 func init() {
-	c, err := api.NewClient(api.DefaultConfig())
-	if err != nil {
-		log.Fatal(err)
-	}
-	client = c
+//	cfg :=api.DefaultConfig()
+//	cfg.Address="192.168.61.70:8500"
+//	c, err := api.NewClient(cfg)
+//	if err != nil {
+//		log.Fatal(err)
+//	}
+//	
+//	client = c
 }
 
 //export LookupBackend
 func LookupBackend(svc *C.char) *C.char {
-	service, tag := extractService(C.GoString(svc))
+	
+	log.Printf("[debug] consul:config %s",C.GoString(svc))
+	
+	service,tag, host := extractService(C.GoString(svc))
 
-	log.Printf("[debug] consul: lookup service=%s, tag=%s", service, tag)
+	log.Printf("[debug] consul: lookup service=%s, tag=%s,host=%s", service, tag,host)
 
-	list, err := backends(service, tag)
+	list, err := backends(service, tag, host)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -65,15 +71,15 @@ func LookupBackend(svc *C.char) *C.char {
 
 // extractService tags a string in the form "tag.name" and separates it into
 // the service and tag name parts.
-func extractService(s string) (service, tag string) {
-	split := strings.SplitN(s, serviceTagSep, 2)
+func extractService(s string) (service, tag, host string) {
+	split := strings.SplitN(s, serviceTagSep, 3)
 
 	switch {
 	case len(split) == 0:
 	case len(split) == 1:
 		service = split[0]
 	default:
-		tag, service = split[0], split[1]
+		tag, service,host = split[0], split[1],split[2]
 	}
 
 	return
@@ -81,7 +87,7 @@ func extractService(s string) (service, tag string) {
 
 // backends collects the list of healthy backends for the given service name and tag,
 // and returns
-func backends(name, tag string) ([]string, error) {
+func backends(name, tag ,host string) ([]string, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), ctxTimeout)
 	defer cancel()
 
@@ -90,6 +96,16 @@ func backends(name, tag string) ([]string, error) {
 	}
 	q = q.WithContext(ctx)
 
+	//init client
+	cfg :=api.DefaultConfig()
+        cfg.Address=host
+        c, err := api.NewClient(cfg)
+        if err != nil {
+                log.Fatal(err)
+        }
+
+        client = c
+	
 	services, _, err := client.Health().Service(name, tag, true, q)
 	if err != nil {
 		return nil, fmt.Errorf("failed to lookup service %q: %s", name, err)
