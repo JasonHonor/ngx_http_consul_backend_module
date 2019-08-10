@@ -108,7 +108,7 @@ This installation guide uses ubuntu/debian. Adapt as-needed for other platforms.
 
     ```sh
     $ cd /tmp
-    $ curl -sLo nginx.tgz https://nginx.org/download/nginx-1.12.2.tar.gz
+    $ curl -sLo nginx.tgz https://nginx.org/download/nginx-1.17.2.tar.gz
     $ tar -xzvf nginx.tgz
     ```
 
@@ -116,14 +116,14 @@ This installation guide uses ubuntu/debian. Adapt as-needed for other platforms.
 
     ```sh
     $ cd /tmp
-    $ curl -sLo ngx_devel_kit-0.3.0.tgz https://github.com/simpl/ngx_devel_kit/archive/v0.3.0.tar.gz
-    $ tar -xzvf ngx_devel_kit-0.3.0.tgz
+    $ curl -sLo ngx_devel_kit-0.3.1.tgz https://github.com/simpl/ngx_devel_kit/archive/v0.3.1.tar.gz
+    $ tar -xzvf ngx_devel_kit-0.3.1.tgz
     ```
 
 1. Download/clone this repository:
 
     ```sh
-    $ git clone https://github.com/hashicorp/ngx_http_consul_backend_module.git /go/src/github.com/hashicorp/ngx_http_consul_backend_module
+    $ git clone https://github.com/hashicorp/ngx_http_consul_backend_module.git /go/src/github.com/JasonHonor/ngx_http_consul_backend_module
     ```
 
 1. Compile the Go code as a shared C library which nginx will dynamically load.
@@ -147,12 +147,12 @@ This uses CGO and binds to the nginx development kit:
 1. Compile and install nginx with the modules:
 
     ```sh
-    $ cd /tmp/nginx-1.12.2
+    $ cd /tmp/nginx-1.17.2
     $ CFLAGS="-g -O0" \
         ./configure \
           --with-debug \
-          --add-module=/tmp/ngx_devel_kit-0.3.0 \
-          --add-module=/go/src/github.com/hashicorp/ngx_http_consul_backend_module
+          --add-module=/tmp/ngx_devel_kit-0.3.1 \
+          --add-module=/go/src/github.com/JasonHonor/ngx_http_consul_backend_module
     $ make
     $ make install
     ```
@@ -166,7 +166,7 @@ This uses CGO and binds to the nginx development kit:
         server_name  example.com;
 
         location /my-service {
-          consul $backend service-name;
+          consul $backend tag-name@service-name@consul-server-ip-port;
           proxy_pass http://$backend;
         }
       }
