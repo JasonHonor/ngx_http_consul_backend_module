@@ -22,7 +22,7 @@ http {
     server_name  example.com;
 
     location /my-service {
-      consul $backend service-name;
+      consul $backend tag-name@service-name@consul-server-ip-port;
       proxy_pass http://$backend;
     }
   }
