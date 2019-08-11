@@ -46,7 +46,7 @@ ngx_module_t ngx_http_consul_backend_module = {
 static ngx_int_t
 ngx_http_consul_backend(ngx_http_request_t *r, ngx_str_t *res, ngx_http_variable_value_t *v,void *cfg) {
   
-  ngx_log_error(NGX_LOG_ERR, r->connection->log, 0,(char*)cfg);
+  //ngx_log_error(NGX_LOG_ERR, r->connection->log, 0,(char*)cfg);
   
   void *go_module = dlopen("/etc/nginx/ext/ngx_http_consul_backend_module.so", RTLD_LAZY);
   
