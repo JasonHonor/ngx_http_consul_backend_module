@@ -116,11 +116,11 @@ ngx_http_consul_backend(ngx_http_request_t *r, ngx_str_t *res, ngx_http_variable
       sprintf(chLocName,"%s/",loc_name.data);
 
       if(ngx_strstr(url.data,chLocName)==NULL)
-                return NGX_DECLINED;
+                return NGX_ABORT;
       
   }else
         if(ngx_strstr(url.data,loc_name.data)<0)
-                return NGX_DECLINED;
+                return NGX_ABORT;
 
   ngx_log_error(NGX_LOG_ERR, r->connection->log, "url=%s loc=%s",url.data,loc_name.data);
   

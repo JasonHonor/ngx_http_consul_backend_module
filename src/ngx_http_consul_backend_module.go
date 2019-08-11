@@ -35,14 +35,6 @@ func main() {}
 
 // setup the consul client
 func init() {
-//	cfg :=api.DefaultConfig()
-//	cfg.Address="192.168.61.70:8500"
-//	c, err := api.NewClient(cfg)
-//	if err != nil {
-//		log.Fatal(err)
-//	}
-//	
-//	client = c
 }
 
 //export LookupBackend

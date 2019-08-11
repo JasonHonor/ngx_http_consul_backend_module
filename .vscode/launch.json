@@ -10,7 +10,7 @@
         "request": "launch",
         "program": "/home/user/nginx-go/nginx-1.17.2/objs/nginx",
         //"processId":,
-        "args": [],
+        "args": ["-c","/etc/nginx/nginx-debug.conf"],
         "stopAtEntry": true,
         "cwd": "/home/user/nginx-go/nginx-1.17.2/objs",
         "environment": [],
