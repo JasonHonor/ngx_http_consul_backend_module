@@ -8,7 +8,7 @@ CGO_CFLAGS="-I /home/user/nginx-go/ngx_devel_kit-0.3.1/src" \
 sudo cp /home/user/nginx-go/ext/ngx_http_consul_backend_module.so /etc/nginx/ext/
 
 cd /home/user/nginx-go/nginx-1.17.2
-CFLAGS="-g -O0" \
+CFLAGS="-g " \
     ./configure \
     --with-debug \
     --prefix=/etc/nginx \
@@ -43,7 +43,8 @@ CFLAGS="-g -O0" \
     --with-mail \
     --with-mail_ssl_module \
     --with-file-aio \
-    --with-cc-opt='-O2 -g -pipe -Wp,-D_FORTIFY_SOURCE=2 -fexceptions -fstack-protector --param=ssp-buffer-size=4 -m64 -mtune=generic'
+    --with-ld-opt='-lunwind-x86_64' \
+    --with-cc-opt='-fno-omit-frame-pointer -g -pipe -Wp,-fexceptions -fstack-protector --param=ssp-buffer-size=4 -m64 -mtune=generic'
 make
 sudo make install
 

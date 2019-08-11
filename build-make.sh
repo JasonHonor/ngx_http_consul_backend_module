@@ -6,3 +6,6 @@ make
 sudo make install
 
 cd /home/user/go/src/github.com/JasonHonor/ngx_http_consul_backend_module
+
+sudo nginx -s stop
+sudo nginx

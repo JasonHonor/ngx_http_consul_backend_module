@@ -1,0 +1,20 @@
+{
+    "configurations": [
+        {
+            "name": "Linux",
+            "includePath": [         
+                "/home/user/nginx-go/nginx-1.17.2/src/**",
+                "/home/user/nginx-go/nginx-1.17.2/objs/**",       
+                "/home/user/nginx-go/ngx_devel_kit-0.3.1/src/**",
+                "/home/user/nginx-go/ngx_devel_kit-0.3.1/objs/**",                
+                "${workspaceFolder}/**"
+            ],
+            "defines": [],
+            "compilerPath": "/opt/rh/devtoolset-8/root/usr/bin/gcc",
+            "cStandard": "c11",
+            "cppStandard": "c++17",
+            "intelliSenseMode": "clang-x64"
+        }
+    ],
+    "version": 4
+}

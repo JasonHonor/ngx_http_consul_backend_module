@@ -1,0 +1,8 @@
+{
+    "files.associations": {
+        "ndk.h": "c",
+        "ngx_config.h": "c",
+        "ndk_config.h": "c",
+        "ndk_includes.h": "c"
+    }
+}
