@@ -37,16 +37,34 @@ func main() {}
 func init() {
 }
 
+
+func ReplaceLocation(url_len int,url,loc *C.char,path string) string {
+	
+	sUrl :=C.GoString(url)
+	sLoc :=C.GoString(loc)
+
+	sUrl = sUrl[0:url_len]
+
+	if len(sLoc)>0 {
+		sUrl = strings.Replace(sUrl,sLoc,path,1)
+	}
+
+	return sUrl
+}
+
 //export LookupBackend
-func LookupBackend(svc *C.char) *C.char {
+func LookupBackend(uri_len int,uri,loc,svc *C.char) *C.char {
 	
 	log.Printf("[debug] consul:config %s",C.GoString(svc))
 	
-	service,tag, host := extractService(C.GoString(svc))
+	service,tag, host,newPath := extractService(C.GoString(svc))
 
-	log.Printf("[debug] consul: lookup service=%s, tag=%s,host=%s", service, tag,host)
+	log.Printf("[debug] consul: lookup service=%s, tag=%s,host=%s,url=%s,loc=%s,uri_len=%d newPath=%s", service, tag,host,uri,loc,uri_len,newPath)
+
+	url := ReplaceLocation(uri_len,uri,loc,newPath)
 
 	list, err := backends(service, tag, host)
+
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -58,20 +76,22 @@ func LookupBackend(svc *C.char) *C.char {
 
 	log.Printf("[debug] consul: returned %d services", len(list))
 
-	return C.CString(list[i])
+	upstream :=strings.Join([]string{list[i],url},"")
+
+	return C.CString(upstream)
 }
 
 // extractService tags a string in the form "tag.name" and separates it into
 // the service and tag name parts.
-func extractService(s string) (service, tag, host string) {
-	split := strings.SplitN(s, serviceTagSep, 3)
+func extractService(s string) (service, tag, host,newPath string) {
+	split := strings.SplitN(s, serviceTagSep, 4)
 
 	switch {
 	case len(split) == 0:
 	case len(split) == 1:
 		service = split[0]
 	default:
-		tag, service,host = split[0], split[1],split[2]
+		tag, service,host,newPath= split[0], split[1],split[2],split[3]
 	}
 
 	return

@@ -112,17 +112,17 @@ ngx_http_consul_backend(ngx_http_request_t *r, ngx_str_t *res, ngx_http_variable
   //check location.
   if(url.len>loc_name.len)
   {
+    #if 0
       char chLocName[64];
       sprintf(chLocName,"%s/",loc_name.data);
 
       if(ngx_strstr(url.data,chLocName)==NULL)
-                return NGX_ABORT;
+                return NGX_DECLINED;
+    #endif
       
   }else
         if(ngx_strstr(url.data,loc_name.data)<0)
-                return NGX_ABORT;
-
-  ngx_log_error(NGX_LOG_ERR, r->connection->log, "url=%s loc=%s",url.data,loc_name.data);
+                return NGX_DECLINED; 
   
   void *go_module = dlopen("/etc/nginx/ext/ngx_http_consul_backend_module.so", RTLD_LAZY);
   
@@ -131,9 +131,9 @@ ngx_http_consul_backend(ngx_http_request_t *r, ngx_str_t *res, ngx_http_variable
     return NGX_ERROR;
   }
 
-  u_char* (*fun)(u_char *) = (u_char* (*)(u_char *)) dlsym(go_module, "LookupBackend");
+  u_char* (*fun)(int,u_char *,u_char *,u_char *) = (u_char* (*)(int,u_char *,u_char *,u_char *)) dlsym(go_module, "LookupBackend");
   
-  u_char* backend = fun(v->data);
+  u_char* backend = fun(url.len,url.data,loc_name.data,v->data);
 
   ngx_str_t ngx_backend = { strlen(backend), backend };
 
@@ -146,6 +146,8 @@ ngx_http_consul_backend(ngx_http_request_t *r, ngx_str_t *res, ngx_http_variable
   ngx_memcpy(res->data, ngx_backend.data, ngx_backend.len);
 
   res->len = ngx_backend.len;
+
+  ngx_log_error(NGX_LOG_ERR, r->connection->log, 0, "url=%s upstream=%s",url.data,res->data);
 
   return NGX_OK;
 }
