@@ -65,7 +65,8 @@ void my_backtrace(ngx_log_t *logger)
     if (NULL == trace) {
         return;
     }
-    for (int i = 0; i < size; ++i) {
+    int i=0;
+    for (i = 0; i < size; ++i) {
         ngx_log_error(NGX_LOG_DEBUG,logger,"%s\n", trace[i]);
     }
     free(trace);
