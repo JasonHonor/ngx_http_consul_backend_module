@@ -1,10 +1,12 @@
-#cd /home/user/go/src/github.com/JasonHonor/ngx_http_consul_backend_module
-#mkdir -p /home/user/nginx-go/ext
-#CGO_CFLAGS="-I /home/user/nginx-go/ngx_devel_kit-0.3.1/src" \
-#    go build \
-#      -buildmode=c-shared \
-#      -o /home/user/nginx-go/ext/ngx_http_consul_backend_module.so \
-#      src/ngx_http_consul_backend_module.go
+cd ~/go/src/github.com/JasonHonor/ngx_http_consul_backend_module
+mkdir -p /root/nginx-go/ext
+CGO_CFLAGS="-I /root/nginx-go/ngx_devel_kit-0.3.1/src" \
+    go build \
+      -buildmode=c-shared \
+      -o /root/nginx-go/ext/ngx_http_consul_backend_module.so \
+      src/ngx_http_consul_backend_module.go
+
+rm /nginx -rf
 mkdir /nginx
 mkdir -p /nginx/ext
 
@@ -45,10 +47,12 @@ CFLAGS="-g " \
     --with-http_auth_request_module \
     --with-mail \
     --with-mail_ssl_module \
-#    --with-ld-opt='-lunwind-aarch64' \
+#--with-ld-opt='-lunwind-aarch64' \
     --with-cc-opt='-fno-omit-frame-pointer -g -pipe -Wp,-fexceptions -fstack-protector --param=ssp-buffer-size=4 -m64 -mtune=generic' 
 
 make
 
 sudo make install
+
 cd /nginx
+
