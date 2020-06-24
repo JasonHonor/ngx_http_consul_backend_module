@@ -23,6 +23,27 @@
                 "ignoreFailures": false
             }
         ]
-    }
+    },
+    "configurations": [       
+        {
+            "name": "(gdb) goAdmin",
+            "type": "godbg",
+            "request": "launch",
+            "program": "go run",
+            //"processId":,
+            "args": ["-c","/etc/nginx/nginx-debug.conf"],
+            "stopAtEntry": true,
+            "cwd": "/home/user/nginx-go/nginx-1.17.2/objs",
+            "environment": [],
+            "externalConsole": false,
+            "MIMode": "gdb",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": false
+                }
+            ]
+        }
     ]
 }
