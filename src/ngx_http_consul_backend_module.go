@@ -59,7 +59,8 @@ func LookupBackend(uri_len int,uri,loc,svc *C.char) *C.char {
 	
 	service,tag, host,newPath := extractService(C.GoString(svc))
 
-	log.Printf("[debug] consul: lookup service=%s, tag=%s,host=%s,url=%s,loc=%s,uri_len=%d newPath=%s", service, tag,host,uri,loc,uri_len,newPath)
+	log.Printf("[debug] consul: lookup service=%s, tag=%s,host=%s,url=%s,loc=%s,uri_len=%d newPath=%s", service, tag,host,C.GoString(uri),
+		C.GoString(loc),uri_len,newPath)
 
 	url := ReplaceLocation(uri_len,uri,loc,newPath)
 

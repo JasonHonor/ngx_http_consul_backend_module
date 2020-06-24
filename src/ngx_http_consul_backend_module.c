@@ -65,7 +65,8 @@ void my_backtrace(ngx_log_t *logger)
     if (NULL == trace) {
         return;
     }
-    for (int i = 0; i < size; ++i) {
+    int i=0;
+    for (i = 0; i < size; ++i) {
         ngx_log_error(NGX_LOG_DEBUG,logger,"%s\n", trace[i]);
     }
     free(trace);
@@ -124,10 +125,10 @@ ngx_http_consul_backend(ngx_http_request_t *r, ngx_str_t *res, ngx_http_variable
         if(ngx_strstr(url.data,loc_name.data)<0)
                 return NGX_DECLINED; 
   
-  void *go_module = dlopen("/etc/nginx/ext/ngx_http_consul_backend_module.so", RTLD_LAZY);
+  void *go_module = dlopen("/nginx/ext/ngx_http_consul_backend_module.so", RTLD_LAZY);
   
   if (!go_module) {
-    ngx_log_error(NGX_LOG_ERR, r->connection->log, 0, "go module not found");
+    ngx_log_error(NGX_LOG_ERR, r->connection->log, 0, "go module not found %s","/nginx/ext/ngx_http_consul_backend_module.so");
     return NGX_ERROR;
   }
 
