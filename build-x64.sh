@@ -1,16 +1,16 @@
-#cd /home/user/go/src/github.com/JasonHonor/ngx_http_consul_backend_module
-#mkdir -p /home/user/nginx-go/ext
-#CGO_CFLAGS="-I /home/user/nginx-go/ngx_devel_kit-0.3.1/src" \
-#    go build \
-#      -buildmode=c-shared \
-#      -o /home/user/nginx-go/ext/ngx_http_consul_backend_module.so \
-#      src/ngx_http_consul_backend_module.go
+cd /home/user/go/src/github.com/JasonHonor/ngx_http_consul_backend_module
+mkdir -p /home/user/nginx-go/ext
+CGO_CFLAGS="-I /home/user/nginx-go/ngx_devel_kit-0.3.1/src" \
+    go build \
+      -buildmode=c-shared \
+      -o /home/user/nginx-go/ext/ngx_http_consul_backend_module.so \
+      src/ngx_http_consul_backend_module.go
 mkdir /nginx
 mkdir -p /nginx/ext
 
-sudo cp /root/nginx-go/ext/ngx_http_consul_backend_module.so /nginx/ext/
+sudo cp /home/user/nginx-go/ext/ngx_http_consul_backend_module.so /nginx/ext/
 
-cd /root/nginx-go/nginx-1.17.2
+cd /home/user/nginx-go/nginx-1.19.0
 CFLAGS="-g " \
     ./configure \
     --with-debug \
@@ -21,8 +21,8 @@ CFLAGS="-g " \
     --http-log-path=/nginx/logs/access.log \
     --pid-path=/nginx/nginx.pid \
     --lock-path=/nginx/nginx.lock \
-    --add-module=/root/nginx-go/ngx_devel_kit-0.3.1 \
-    --add-module=/root/go/src/github.com/JasonHonor/ngx_http_consul_backend_module \
+    --add-module=/home/user/nginx-go/ngx_devel_kit-0.3.1 \
+    --add-module=/home/user/go/src/github.com/JasonHonor/ngx_http_consul_backend_module \
     --http-client-body-temp-path=/nginx/client_temp \
     --http-proxy-temp-path=/nginx/proxy_temp \
     --http-fastcgi-temp-path=/nginx/fastcgi_temp \
@@ -31,6 +31,7 @@ CFLAGS="-g " \
     --user=nginx \
     --group=nginx \
     --with-http_ssl_module \
+    --with-openssl=/home/user/nginx-go/openssl-1.1.1g \
     --with-http_realip_module \
     --with-http_addition_module \
     --with-http_sub_module \

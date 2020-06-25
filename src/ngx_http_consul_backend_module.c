@@ -148,7 +148,7 @@ ngx_http_consul_backend(ngx_http_request_t *r, ngx_str_t *res, ngx_http_variable
 
   res->len = ngx_backend.len;
 
-  ngx_log_error(NGX_LOG_ERR, r->connection->log, 0, "url=%s upstream=%s",url.data,res->data);
+  ngx_log_error(NGX_LOG_DEBUG, r->connection->log, 0, "url=%s upstream=%s",url.data,res->data);
 
   return NGX_OK;
 }

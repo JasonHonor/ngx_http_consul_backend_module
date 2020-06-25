@@ -70,6 +70,7 @@ func LookupBackend(uri_len int,uri,loc,svc *C.char) *C.char {
 		log.Fatal(err)
 	}
 	if len(list) < 1 {
+		log.Printf("[error] no backend for %s",C.GoString(svc))
 		return resultNoBackend
 	}
 
